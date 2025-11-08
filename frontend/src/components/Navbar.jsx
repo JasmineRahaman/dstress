@@ -1,10 +1,17 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-function Navbar({ user, onLogin, onLogout }) {
+function Navbar({ user, setUser }) {
   const location = useLocation()
+  const navigate = useNavigate()
 
   const isActive = (path) => location.pathname === path
+
+  const handleLogout = () => {
+    localStorage.removeItem('user')
+    setUser(null)
+    navigate('/login')
+  }
 
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
@@ -19,89 +26,17 @@ function Navbar({ user, onLogin, onLogout }) {
           </div>
 
           <div className="flex items-center space-x-4">
-            <Link
-              to="/questionnaire"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isActive('/questionnaire')
-                  ? 'bg-calm-blue-100 text-calm-blue-700'
-                  : 'text-gray-700 hover:bg-calm-blue-50'
-              }`}
-            >
-              Assessment
-            </Link>
-            <Link
-              to="/resources"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isActive('/resources')
-                  ? 'bg-calm-blue-100 text-calm-blue-700'
-                  : 'text-gray-700 hover:bg-calm-blue-50'
-              }`}
-            >
-              Resources
-            </Link>
-            <Link
-              to="/activities"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isActive('/activities')
-                  ? 'bg-calm-blue-100 text-calm-blue-700'
-                  : 'text-gray-700 hover:bg-calm-blue-50'
-              }`}
-            >
-              Activities
-            </Link>
+            <NavLink to="/questionnaire" label="Assessment" isActive={isActive} />
+            <NavLink to="/resources" label="Resources" isActive={isActive} />
+            <NavLink to="/activities" label="Activities" isActive={isActive} />
             {user && (
               <>
-                <Link
-                  to="/professionals"
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    isActive('/professionals')
-                      ? 'bg-calm-blue-100 text-calm-blue-700'
-                      : 'text-gray-700 hover:bg-calm-blue-50'
-                  }`}
-                >
-                  Professionals
-                </Link>
-                <Link
-                  to="/games"
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    isActive('/games')
-                      ? 'bg-calm-blue-100 text-calm-blue-700'
-                      : 'text-gray-700 hover:bg-calm-blue-50'
-                  }`}
-                >
-                  Games
-                </Link>
-                <Link
-                  to="/community"
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    isActive('/community')
-                      ? 'bg-calm-blue-100 text-calm-blue-700'
-                      : 'text-gray-700 hover:bg-calm-blue-50'
-                  }`}
-                >
-                  Community
-                </Link>
-                <Link
-                  to="/profile"
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    isActive('/profile')
-                      ? 'bg-calm-blue-100 text-calm-blue-700'
-                      : 'text-gray-700 hover:bg-calm-blue-50'
-                  }`}
-                >
-                  Profile
-                </Link>
-                {user.is_admin && (
-                  <Link
-                    to="/admin"
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                      isActive('/admin')
-                        ? 'bg-calm-lavender-100 text-calm-lavender-700'
-                        : 'text-gray-700 hover:bg-calm-lavender-50'
-                    }`}
-                  >
-                    Admin
-                  </Link>
+                <NavLink to="/professionals" label="Professionals" isActive={isActive} />
+                <NavLink to="/gameshub" label="Games" isActive={isActive} />
+                <NavLink to="/community" label="Community" isActive={isActive} />
+                <NavLink to="/profile" label="Profile" isActive={isActive} />
+                {user?.is_admin && (
+                  <NavLink to="/admin" label="Admin" isActive={isActive} admin />
                 )}
               </>
             )}
@@ -112,7 +47,7 @@ function Navbar({ user, onLogin, onLogout }) {
               <div className="flex items-center space-x-4">
                 <span className="text-sm text-gray-700">Hello, {user.name}</span>
                 <button
-                  onClick={onLogout}
+                  onClick={handleLogout}
                   className="bg-calm-blue-500 hover:bg-calm-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
                 >
                   Logout
@@ -120,7 +55,7 @@ function Navbar({ user, onLogin, onLogout }) {
               </div>
             ) : (
               <button
-                onClick={onLogin}
+                onClick={() => navigate('/login')}
                 className="bg-calm-green-500 hover:bg-calm-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
               >
                 Login
@@ -130,6 +65,25 @@ function Navbar({ user, onLogin, onLogout }) {
         </div>
       </div>
     </nav>
+  )
+}
+
+function NavLink({ to, label, isActive, admin = false }) {
+  const base = 'px-3 py-2 rounded-md text-sm font-medium transition-colors'
+  const activeClass = admin
+    ? 'bg-calm-lavender-100 text-calm-lavender-700'
+    : 'bg-calm-blue-100 text-calm-blue-700'
+  const hoverClass = admin
+    ? 'hover:bg-calm-lavender-50'
+    : 'hover:bg-calm-blue-50'
+
+  const inactiveClass = `text-gray-700 ${hoverClass}`
+  const finalClass = `${base} ${isActive(to) ? activeClass : inactiveClass}`
+
+  return (
+    <Link to={to} className={finalClass}>
+      {label}
+    </Link>
   )
 }
 

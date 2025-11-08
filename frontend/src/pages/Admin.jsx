@@ -16,9 +16,12 @@ function Admin() {
   const [editingPro, setEditingPro] = useState(null)
   const [proForm, setProForm] = useState({
     name: '',
+    contact: '',
+    email:'',
     specialization: '',
     bio: '',
     rate: ''
+
   })
 
   useEffect(() => {
@@ -57,7 +60,7 @@ function Admin() {
       }
       setShowProForm(false)
       setEditingPro(null)
-      setProForm({ name: '', specialization: '', bio: '', rate: '' })
+      setProForm({ name: '',contact:'',email:'', specialization: '', bio: '', rate: '' })
       loadData()
     } catch (error) {
       console.error('Error saving professional:', error)
@@ -68,6 +71,8 @@ function Admin() {
     setEditingPro(pro)
     setProForm({
       name: pro.name,
+      contact: pro.contact,
+      email: pro.email,
       specialization: pro.specialization,
       bio: pro.bio,
       rate: pro.rate
@@ -224,6 +229,26 @@ function Admin() {
                   />
                 </div>
                 <div className="mb-4">
+                  <label className="block text-gray-700 font-medium mb-2">Contact</label>
+                  <input
+                    type="text"
+                    value={proForm.contact}
+                    onChange={(e) => setProForm({ ...proForm, contact: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-calm-lavender-500"
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-medium mb-2">Email</label>
+                  <input
+                    type="email"
+                    value={proForm.email}
+                    onChange={(e) => setProForm({ ...proForm, email: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-calm-lavender-500"
+                    required
+                  />
+                </div>
+                <div className="mb-4">
                   <label className="block text-gray-700 font-medium mb-2">Specialization</label>
                   <input
                     type="text"
@@ -265,7 +290,7 @@ function Admin() {
                     onClick={() => {
                       setShowProForm(false)
                       setEditingPro(null)
-                      setProForm({ name: '', specialization: '', bio: '', rate: '' })
+                      setProForm({ name: '',contact: '',email: '', specialization: '', bio: '', rate: '' })
                     }}
                     className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-md font-medium"
                   >

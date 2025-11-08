@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, JSON, DateTime, ForeignKey
-from datetime import datetime
+from datetime import datetime, timezone
 from database import Base
 
 class Assessment(Base):
@@ -11,4 +11,4 @@ class Assessment(Base):
     total_score = Column(Integer, nullable=False)
     category_scores = Column(JSON, nullable=False)
     stress_level = Column(String, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))

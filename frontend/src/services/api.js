@@ -1,27 +1,32 @@
 import axios from 'axios'
 
-const API_BASE = '/api'
+// ✅ Updated base URL to point to FastAPI backend
+const API_BASE = 'http://localhost:8000'
 
 const api = axios.create({
   baseURL: API_BASE,
   withCredentials: true,
 })
 
+// Auth
 export const getUserProfile = async () => {
   const response = await api.get('/auth/user')
   return response.data
 }
 
+// Questionnaire
 export const submitQuestionnaire = async (answers) => {
   const response = await api.post('/questionnaire/submit', answers)
   return response.data
 }
 
+// Activities
 export const getActivities = async (score) => {
   const response = await api.get(`/activities?score=${score}`)
   return response.data
 }
 
+// Professionals
 export const getProfessionals = async () => {
   const response = await api.get('/professionals')
   return response.data
@@ -37,6 +42,7 @@ export const getMyBookings = async () => {
   return response.data
 }
 
+// Community
 export const getCommunityPosts = async () => {
   const response = await api.get('/community/posts')
   return response.data
@@ -59,6 +65,7 @@ export const addComment = async (postId, content) => {
   return response.data
 }
 
+// Todos
 export const getTodos = async () => {
   const response = await api.get('/todos')
   return response.data
@@ -79,6 +86,7 @@ export const deleteTodo = async (todoId) => {
   return response.data
 }
 
+// Admin
 export const getAdminUsers = async () => {
   const response = await api.get('/admin/users')
   return response.data
