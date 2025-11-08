@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
-import Questionnaire from './pages/Questionnaire'
+import Questionnaire from './pages/Assesment/Questionnaire';
 import Results from './pages/Results'
 import Resources from './pages/Resources'
 import Activities from './pages/Activities'
@@ -11,6 +11,7 @@ import Games from './pages/Games'
 import Community from './pages/Community'
 import Profile from './pages/Profile'
 import Admin from './pages/Admin'
+import Scrap from './pages/Scrap/Scrap';
 import { getUserProfile } from './services/api'
 
 function App() {
@@ -70,6 +71,8 @@ function App() {
           <Route path="/community" element={user ? <Community user={user} /> : <Navigate to="/" />} />
           <Route path="/profile" element={user ? <Profile user={user} /> : <Navigate to="/" />} />
           <Route path="/admin" element={user?.is_admin ? <Admin /> : <Navigate to="/" />} />
+        
+          <Route path="/scrap" element={<Scrap />} />
         </Routes>
       </div>
     </Router>

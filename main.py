@@ -1,5 +1,5 @@
 def main():
-    print("Hello from repl-nix-workspace!")
+    print("Hello trying to keep up with replit")
 
 
 if __name__ == "__main__":
