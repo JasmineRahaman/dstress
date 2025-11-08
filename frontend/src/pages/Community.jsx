@@ -117,7 +117,7 @@ function Community({ user }) {
             <div key={post.id} className="bg-white rounded-lg shadow-md p-6">
               {post.type === 'image' && post.image_url && (
                 <img
-                  src={post.image_url}
+                  src={`http://localhost:8000${encodeURI(post.image_url)}`}
                   alt="Event poster"
                   className="w-full rounded-lg mb-4"
                 />

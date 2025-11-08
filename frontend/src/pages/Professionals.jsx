@@ -18,7 +18,15 @@ function Professionals({ user }) {
         getProfessionals(),
         getMyBookings()
       ])
-      setProfessionals(prosData)
+
+      console.log('Professionals data:', prosData)
+
+      // Ensure prosData is an array
+      const prosArray = Array.isArray(prosData)
+        ? prosData
+        : prosData?.professionals || prosData?.data || []
+
+      setProfessionals(prosArray)
       setBookings(bookingsData)
     } catch (error) {
       console.error('Error loading data:', error)
@@ -42,9 +50,11 @@ function Professionals({ user }) {
   }
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">
-      <div className="text-calm-blue-700 text-xl">Loading...</div>
-    </div>
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-calm-blue-700 text-xl">Loading...</div>
+      </div>
+    )
   }
 
   return (
@@ -58,11 +68,9 @@ function Professionals({ user }) {
           <div>
             <h2 className="text-2xl font-semibold text-gray-800 mb-6">Available Professionals</h2>
             <div className="space-y-4">
-              {professionals.map((pro) => (
+              {Array.isArray(professionals) && professionals.map((pro) => (
                 <div key={pro.id} className="bg-white rounded-lg shadow-md p-6">
-                  <h3 className="text-xl font-semibold text-calm-blue-700 mb-2">
-                    {pro.name}
-                  </h3>
+                  <h3 className="text-xl font-semibold text-calm-blue-700 mb-2">{pro.name}</h3>
                   <p className="text-gray-600 mb-2">{pro.specialization}</p>
                   <p className="text-gray-500 text-sm mb-4">{pro.bio}</p>
                   <div className="flex justify-between items-center">

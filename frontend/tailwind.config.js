@@ -42,6 +42,9 @@ export default {
           800: '#6b21a8',
           900: '#581c87',
         },
+        'mist-blue':	'bg-[#dbeafe]',
+        'lavender-gray':'bg-[#e6e6fa]',
+        
       },
     },
   },

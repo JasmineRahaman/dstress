@@ -21,6 +21,8 @@ async def get_professionals(db: Session = Depends(get_db)):
     return [{
         "id": p.id,
         "name": p.name,
+        "contact":p.contact,
+        "email":p.email,
         "specialization": p.specialization,
         "bio": p.bio,
         "rate": p.rate

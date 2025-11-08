@@ -10,6 +10,8 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 class ProfessionalCreate(BaseModel):
     name: str
+    contact: str
+    email: str
     specialization: str
     bio: str
     rate: float
@@ -25,7 +27,7 @@ async def get_users(request: Request, db: Session = Depends(get_db)):
         "email": u.email,
         "is_authorized": u.is_authorized,
         "is_admin": u.is_admin,
-        "created_at": u.created_at.isoformat()
+        "created_at": u.created_at.isoformat() if u.created_at else None
     } for u in users]
 
 @router.post("/users/{user_id}/authorize")
@@ -53,6 +55,8 @@ async def get_professionals(request: Request, db: Session = Depends(get_db)):
     return [{
         "id": p.id,
         "name": p.name,
+        "contact":p.contact,
+        "email":p.email,
         "specialization": p.specialization,
         "bio": p.bio,
         "rate": p.rate
@@ -69,6 +73,8 @@ async def create_professional(
     professional = Professional(
         name=pro_data.name,
         specialization=pro_data.specialization,
+        contact=pro_data.contact,
+        email=pro_data.email,
         bio=pro_data.bio,
         rate=pro_data.rate
     )
@@ -93,6 +99,8 @@ async def update_professional(
         raise HTTPException(status_code=404, detail="Professional not found")
     
     professional.name = pro_data.name
+    professional.contact=pro_data.contact
+    professional.email=pro_data.email
     professional.specialization = pro_data.specialization
     professional.bio = pro_data.bio
     professional.rate = pro_data.rate
