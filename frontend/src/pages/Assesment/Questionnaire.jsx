@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { submitQuestionnaire } from "../../services/api";
-
+import { useLocation } from "react-router-dom";
 
 const questions = [
   {
@@ -75,15 +75,37 @@ const options = [
 ];
 
 function Questionnaire({ setTestScore }) {
-  const navigate = useNavigate();
 
-  const [startAssessment, setStartAssessment] = useState(false);
+
+
+
+
+
+  // const [startAssessment, setStartAssessment] = useState(false);
+  const [isTakingTest, setIsTakingTest] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const [answers, setAnswers] = useState({});
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const navigate = useNavigate();
 
 
+  const handleQuitClick = () => {
+    setShowConfirm(true);
+  };
+
+  const handleConfirmQuit = () => {
+    setIsTakingTest(false);
+    setShowConfirm(false);
+    // navigate to home or results page
+    window.location.href = "/";
+  };
+
+  const handleCancelQuit = () => {
+    setShowConfirm(false);
+  };
 
   const handleAnswer = (questionId, value) => {
     setAnswers({ ...answers, [questionId]: value });
@@ -111,6 +133,7 @@ function Questionnaire({ setTestScore }) {
     try {
       const result = await submitQuestionnaire({ answers });
       setTestScore(result);
+      setIsTakingTest(false);
       navigate("/results");
     } catch (error) {
       console.error("Error submitting questionnaire:", error);
@@ -123,7 +146,7 @@ function Questionnaire({ setTestScore }) {
   const question = questions[currentQuestion];
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
-  if (startAssessment) {
+  if (isTakingTest) {
     return (
       <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
@@ -180,43 +203,80 @@ function Questionnaire({ setTestScore }) {
 
             <div className="flex justify-between">
               <button
-                onClick={handlePrevious}
-                disabled={currentQuestion === 0}
-                className={`px-6 py-2 rounded-md font-medium transition-colors ${
-                  currentQuestion === 0
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-calm-blue-500 text-white hover:bg-calm-blue-600"
-                }`}
+                onClick={handleQuitClick}
+                className="bg-red-600  hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors "
               >
-                Previous
+                {/* End Assessment Button */}
+                End Assesment
               </button>
 
-              {currentQuestion < questions.length - 1 ? (
+              <div className="space-x-4">
+                {" "}
+                {/* Navigation Buttons */}
                 <button
-                  onClick={handleNext}
-                  disabled={!answers[question.id]}
+                  onClick={handlePrevious}
+                  disabled={currentQuestion === 0}
                   className={`px-6 py-2 rounded-md font-medium transition-colors ${
-                    !answers[question.id]
+                    currentQuestion === 0
                       ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                      : "bg-calm-green-500 text-white hover:bg-calm-green-600"
+                      : "bg-calm-blue-500 text-white hover:bg-calm-blue-600"
                   }`}
                 >
-                  Next
+                  Previous
                 </button>
-              ) : (
-                <button
-                  onClick={handleSubmit}
-                  disabled={!answers[question.id] || isSubmitting}
-                  className={`px-6 py-2 rounded-md font-medium transition-colors ${
-                    !answers[question.id] || isSubmitting
-                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                      : "bg-calm-green-500 text-white hover:bg-calm-green-600"
-                  }`}
-                >
-                  {isSubmitting ? "Submitting..." : "Submit"}
-                </button>
-              )}
+                {currentQuestion < questions.length - 1 ? (
+                  <button
+                    onClick={handleNext}
+                    disabled={!answers[question.id]}
+                    className={`px-6 py-2 rounded-md font-medium transition-colors ${
+                      !answers[question.id]
+                        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                        : "bg-calm-green-500 text-white hover:bg-calm-green-600"
+                    }`}
+                  >
+                    Next
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleSubmit}
+                    disabled={!answers[question.id] || isSubmitting}
+                    className={`px-6 py-2 rounded-md font-medium transition-colors ${
+                      !answers[question.id] || isSubmitting
+                        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                        : "bg-calm-green-500 text-white hover:bg-calm-green-600"
+                    }`}
+                  >
+                    {isSubmitting ? "Submitting..." : "Submit"}
+                  </button>
+                )}
+              </div>
             </div>
+
+            {/* Confirmation Modal */}
+            {showConfirm && (
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div className="bg-white rounded-xl p-6 shadow-xl text-center">
+                  <h2 className="text-lg font-semibold mb-4">Confirm Exit</h2>
+                  <p className="mb-6">
+                    Are you sure you want to quit? Your progress will be lost.
+                  </p>
+                  <div className="flex justify-center gap-4">
+                    <button
+                      onClick={handleCancelQuit}
+                      className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleConfirmQuit}
+                      className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                    >
+                      Yes, Quit
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -232,7 +292,7 @@ function Questionnaire({ setTestScore }) {
             <div>
               <button
                 className="bg-calm-blue-500 hover:bg-calm-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-                onClick={() => setStartAssessment(true)}
+                onClick={() => setIsTakingTest(true)}
               >
                 Start Assesment
               </button>
