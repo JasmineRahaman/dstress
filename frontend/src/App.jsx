@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Router, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
-import Questionnaire from './pages/Assesment/Questionnaire';
+import Questionnaire from './pages/Questionnaire';
 import Results from './pages/Results'
 import Resources from './pages/Resources'
 import Activities from './pages/Activities'
@@ -21,7 +21,7 @@ import ColorMemoryMaze from './pages/ColorMemoryMaze'
 import { getUserProfile } from './services/api'
 
 function App() {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null) 
   const [loading, setLoading] = useState(true)
   const [testScore, setTestScore] = useState(null)
 

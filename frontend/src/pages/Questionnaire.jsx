@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { submitQuestionnaire } from "../../services/api";
+import { submitQuestionnaire } from "../services/api";
 import { useLocation } from "react-router-dom";
 
 const questions = [
@@ -146,7 +146,7 @@ function Questionnaire({ setTestScore }) {
   const question = questions[currentQuestion];
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
-  if (isTakingTest) {
+ 
     return (
       <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
@@ -281,26 +281,6 @@ function Questionnaire({ setTestScore }) {
         </div>
       </div>
     );
-  } else {
-    return (
-      <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-center text-3xl font-bold text-calm-blue-700 mb-4">
-            Stress Assesment Questionnaire
-          </h1>
-          <div className="bg-white rounded-lg shadow-xl p-8">
-            <div>
-              <button
-                className="bg-calm-blue-500 hover:bg-calm-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-                onClick={() => setIsTakingTest(true)}
-              >
-                Start Assesment
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  
 }
 export default Questionnaire;
