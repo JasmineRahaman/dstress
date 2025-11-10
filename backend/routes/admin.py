@@ -47,6 +47,24 @@ async def authorize_user(
     
     return {"status": "success"}
 
+@router.post("/admin/users/{user_id}/delete")                     #delete User
+async def delete_user(
+    user_id: int,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    require_admin(request, db)
+    
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    db.delete(user)
+    db.commit()
+    
+    return {"status": "success"}
+
+
 @router.get("/professionals")
 async def get_professionals(request: Request, db: Session = Depends(get_db)):
     require_admin(request, db)
@@ -108,6 +126,7 @@ async def update_professional(
     db.commit()
     
     return {"status": "success"}
+
 
 @router.delete("/professionals/{professional_id}")
 async def delete_professional(
