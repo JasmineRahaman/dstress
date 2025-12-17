@@ -24,6 +24,13 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="D-Stress API")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.include_router(auth.router)
 app.include_router(questionnaire.router)
 app.include_router(activities.router)
@@ -33,13 +40,6 @@ app.include_router(community.router)
 app.include_router(todos.router)
 app.include_router(admin.router)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5000"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 os.makedirs("uploads", exist_ok=True)
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")

@@ -47,7 +47,7 @@ async def authorize_user(
     
     return {"status": "success"}
 
-@router.post("/admin/users/{user_id}/delete")                     #delete User
+@router.delete("/users/{user_id}/delete")                     #delete User
 async def delete_user(
     user_id: int,
     request: Request,

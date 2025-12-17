@@ -98,7 +98,7 @@ export const authorizeUser = async (userId) => {
 }
 
 export const deleteUser = async (userId) => {
-  const response = await api.post(`/admin/users/${userId}/delete`)
+  const response = await api.delete(`/admin/users/${userId}/delete`)
   return response.data
 }
 
