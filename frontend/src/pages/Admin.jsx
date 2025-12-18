@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import {
   getAdminUsers,
   authorizeUser,
+  deleteUser,
   getAdminProfessionals,
   createProfessional,
   updateProfessional,
-  deleteProfessional
+  deleteProfessional,
 } from '../services/api'
 
 function Admin() {
@@ -47,6 +48,17 @@ function Admin() {
       loadData()
     } catch (error) {
       console.error('Error authorizing user:', error)
+    }
+  }
+
+  const handleDeleteUser = async (userId) => {
+    if (window.confirm('Are you sure you want to delete this professional?')) {
+      try {
+        await deleteUser(userId)
+        loadData()
+      } catch (error) {
+        console.error('Error deleting User:', error)
+      }
     }
   }
 
@@ -152,7 +164,7 @@ function Admin() {
                           {user.is_authorized ? 'Authorized' : 'Pending'}
                         </span>
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 space-x-2">
                         {!user.is_authorized && (
                           <button
                             onClick={() => handleAuthorizeUser(user.id)}
@@ -161,6 +173,12 @@ function Admin() {
                             Authorize
                           </button>
                         )}
+                        <button
+                            onClick={() => handleDeleteUser(user.id)}
+                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded-md text-sm"
+                          >
+                            Delete
+                          </button>
                       </td>
                     </tr>
                   ))}

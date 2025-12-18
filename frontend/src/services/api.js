@@ -97,6 +97,11 @@ export const authorizeUser = async (userId) => {
   return response.data
 }
 
+export const deleteUser = async (userId) => {
+  const response = await api.delete(`/admin/users/${userId}/delete`)
+  return response.data
+}
+
 export const getAdminProfessionals = async () => {
   const response = await api.get('/admin/professionals')
   return response.data
