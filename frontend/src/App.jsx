@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Router, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
-import Questionnaire from './pages/Questionnaire';
+import Questionnaire from './pages/Questionnaire'
 import Results from './pages/Results'
 import Resources from './pages/Resources'
 import Activities from './pages/Activities'
@@ -17,11 +17,14 @@ import MemoryGame from './pages/MemoryGame'
 import GamesHub from './pages/GamesHub'
 import BreathingGame from './pages/BreathingGame'
 import ColorMemoryMaze from './pages/ColorMemoryMaze'
+// import ZenGarden from './pages/ZenGarden'
+import PatternBuilder from './pages/PatternBuilder'
+import BrainRot from './pages/BrainRot'
 
 import { getUserProfile } from './services/api'
 
 function App() {
-  const [user, setUser] = useState(null) 
+  const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [testScore, setTestScore] = useState(null)
 
@@ -88,6 +91,9 @@ function App() {
           <Route path="/gameshub" element={<GamesHub user={user} />} />
           <Route path="/gameshub/breathing" element={<BreathingGame user={user}/>}/>
           <Route path="/gameshub/colors" element={<ColorMemoryMaze user={user}/>}/>
+          {/* <Route path="/gameshub/zengarden" element={<ZenGarden user={user}/>}/> */}
+          <Route path="/gameshub/patternbuilder" element={<PatternBuilder user={user}/>}/>
+          <Route path="/gameshub/brainrot" element={<BrainRot user={user}/>}/>
         </Routes>
       </div>
     // {/* </Router> */}
